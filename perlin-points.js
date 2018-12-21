@@ -4,8 +4,8 @@ const { lerp } = require('canvas-sketch-util/math')
 const random = require('canvas-sketch-util/random')
 
 const settings = {
-  dimensions: [2048, 2048],
-  // units: 'in',
+  dimensions: 'poster',
+  units: 'in',
   // pixelsPerInch: 300
 };
 
@@ -33,20 +33,20 @@ const sketch = async () => {
     return grid
   }
 
-  const data = createGrid(30)
-  const margin = 300
+  const data = createGrid(20)
+  const margin = 2
   const rFactor = 0.001
-  const iterations = 1
-  const segments = 10000
-  const scale = 0.05
-  const zScale = 0.001
-  const strength = 2
-  const strokeStyleFactor = 0.01
+  const iterations = 1 
+  const segments = 1000
+  const scale = 1.5 
+  const zScale = 1
+  const strength = 0.01
+  const strokeStyleFactor = 0.001
 
   return ({ context, width, height }) => {
     context.fillStyle = '#fdfdfd';
     context.fillRect(0, 0, width, height);
-    context.lineWidth = width * 0.01
+    context.lineWidth = width * strokeStyleFactor
     for( let i = 0; i < iterations; i++) {
       data.forEach(({ position, color }) => {
         const [ u, v ] = position

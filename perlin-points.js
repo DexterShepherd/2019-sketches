@@ -6,7 +6,7 @@ const random = require('canvas-sketch-util/random')
 const settings = {
   dimensions: 'poster',
   units: 'in',
-  pixelsPerInch: 300
+  pixelsPerInch: 500
 };
 
 const sketch = () => {

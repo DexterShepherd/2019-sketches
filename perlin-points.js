@@ -18,25 +18,19 @@ const sketch = () => {
         const v = y / (count - 1)
         grid.push({
           position: [u, v],
-          color: `hsla(${
-            180 + (random.gaussian() * 20)
-          }, ${
-            60 + (random.gaussian() * 30)
-          }%, ${
-            20 + (random.gaussian() * 40)
-          }%, ${0.2})`,
+          color: `rgba(10, 10, 10, 0.1)`,
         })
       }
     }
     return grid
   }
 
-  const data = createGrid(60)
+  const data = createGrid(150)
   const margin = 2
-  const iterations = 3
+  const iterations = 2
   const segmentMax = 200
   const scale = 2.5 
-  const zScale = 1
+  const zScale = 0.4
   const strength = 0.008
   const strokeStyleFactor = 0.002
   const yTransFactor = 0.1

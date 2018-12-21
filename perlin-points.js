@@ -6,42 +6,40 @@ const random = require('canvas-sketch-util/random')
 const settings = {
   dimensions: 'poster',
   units: 'in',
-  // pixelsPerInch: 300
+  pixelsPerInch: 300
 };
 
-const sketch = async () => {
-  const image = await pixels('./assets/trees-above.jpg')
-  const pix = []
-
-  for ( let i = 0; i < image.data.length; i += 4 ) {
-    pix.push(image.data.slice(i, i + 4))
-  }
-
+const sketch = () => {
   const createGrid = (count) => {
     const grid = []
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
         const u = x / (count - 1)
         const v = y / (count - 1)
-        const [r, g, b, a ] = random.pick(pix) 
         grid.push({
           position: [u, v],
-          color: `rgba(${r}, ${g}, ${b}, ${0.2})`,
+          color: `hsla(${
+            180 + (random.gaussian() * 20)
+          }, ${
+            60 + (random.gaussian() * 30)
+          }%, ${
+            20 + (random.gaussian() * 40)
+          }%, ${0.2})`,
         })
       }
     }
     return grid
   }
 
-  const data = createGrid(100)
-  const margin = 3
-  const rFactor = 0.001
+  const data = createGrid(60)
+  const margin = 2
   const iterations = 3
   const segmentMax = 200
   const scale = 2.5 
   const zScale = 1
   const strength = 0.008
   const strokeStyleFactor = 0.002
+  const yTransFactor = 0.1
 
   return ({ context, width, height }) => {
     context.fillStyle = '#fdfdfd';

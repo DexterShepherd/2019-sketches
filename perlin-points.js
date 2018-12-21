@@ -5,7 +5,8 @@ const random = require('canvas-sketch-util/random')
 
 const settings = {
   dimensions: [2048, 2048],
-  pixelsPerInch: 300
+  // units: 'in',
+  // pixelsPerInch: 300
 };
 
 const sketch = async () => {
@@ -25,7 +26,7 @@ const sketch = async () => {
         const [r, g, b, a ] = random.pick(pix) 
         grid.push({
           position: [u, v],
-          color: `rgba(${r}, ${g}, ${b}, 0.5)`,
+          color: `rgba(${r}, ${g}, ${b}, 0.3)`,
         })
       }
     }
@@ -35,15 +36,17 @@ const sketch = async () => {
   const data = createGrid(30)
   const margin = 300
   const rFactor = 0.001
-  const iterations = 5
+  const iterations = 1
   const segments = 10000
   const scale = 0.05
   const zScale = 0.001
   const strength = 2
+  const strokeStyleFactor = 0.01
 
   return ({ context, width, height }) => {
     context.fillStyle = '#fdfdfd';
     context.fillRect(0, 0, width, height);
+    context.lineWidth = width * 0.01
     for( let i = 0; i < iterations; i++) {
       data.forEach(({ position, color }) => {
         const [ u, v ] = position

@@ -26,22 +26,22 @@ const sketch = async () => {
         const [r, g, b, a ] = random.pick(pix) 
         grid.push({
           position: [u, v],
-          color: `rgba(${r}, ${g}, ${b}, 0.3)`,
+          color: `rgba(${r}, ${g}, ${b}, ${0.2})`,
         })
       }
     }
     return grid
   }
 
-  const data = createGrid(20)
-  const margin = 2
+  const data = createGrid(100)
+  const margin = 3
   const rFactor = 0.001
-  const iterations = 1 
-  const segments = 1000
-  const scale = 1.5 
+  const iterations = 3
+  const segmentMax = 200
+  const scale = 2.5 
   const zScale = 1
-  const strength = 0.01
-  const strokeStyleFactor = 0.001
+  const strength = 0.008
+  const strokeStyleFactor = 0.002
 
   return ({ context, width, height }) => {
     context.fillStyle = '#fdfdfd';
@@ -54,6 +54,7 @@ const sketch = async () => {
         let y = lerp(margin, height - margin, v)
         context.beginPath()
         context.strokeStyle = color;
+        const segments = random.gaussian() * segmentMax
         for( let j = 0; j < segments; j++ ) {
           const angle = random.noise3D(
             x * scale,

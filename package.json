@@ -15,6 +15,7 @@
     "get-pixels": "^3.3.2",
     "image-pixels": "^2.2.0",
     "load-asset": "^1.2.0",
-    "three": "^0.99.0"
+    "three": "^0.99.0",
+    "vectors": "^0.1.0"
   }
 }

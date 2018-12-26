@@ -16,8 +16,8 @@ const sketch = () => {
     const grid = []
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
-        const u = count > 1 ? x / (count - 1) : 1
-        const v = count > 1 ? y / (count - 1) : 1
+        const u = count > 1 ? x / (count - 1) : 0.5
+        const v = count > 1 ? y / (count - 1) : 0.5
         grid.push({
           position: [u, v],
           color: `rgba(0, 0, 0, 1)`,
@@ -27,7 +27,7 @@ const sketch = () => {
     return grid
   }
 
-  const data = createGrid(4)
+  const data = createGrid(1)
   const margin = 3
   const iterations = 1
   const segmentMax = 1000
@@ -77,17 +77,17 @@ const sketch = () => {
             )
             for( let i = 0; i < height; i++ ) {
               const angle = i / height
+              const nAngle = random.noise3D(
+                x * scale,
+                y * scale,
+                i * zScale) * maxAngle
               context.strokeStyle = `hsla(
                 ${lerp(180, 220, angle)},
                 ${lerp(40, 55, angle)}%,
                 ${lerp(30, 100, angle)}%,
                 ${shadowMax - (shadowMax * angle)})`
-              const nAngle = random.noise3D(
-                x * scale,
-                y * scale,
-                i * zScale) * maxAngle
-              x += Math.cos(nAngle) * strength * 10
-              y += Math.sin(nAngle) * strength * 10
+              x += Math.cos(nAngle) * strength * 8
+              y += Math.sin(nAngle) * strength * 8
               context.beginPath()
               context.arc(
                 x + (height * angle * shadowDensity * 0.5),

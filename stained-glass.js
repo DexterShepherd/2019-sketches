@@ -2,6 +2,8 @@ const canvasSketch = require('canvas-sketch')
 const pixels = require('image-pixels')
 const { lerp } = require('canvas-sketch-util/math')
 const random = require('canvas-sketch-util/random')
+const sub = require('vectors/sub')(2)
+const normalize = require('vectors/normalize')(2)
 
 const settings = {
   dimensions: 'poster',
@@ -14,26 +16,26 @@ const sketch = () => {
     const grid = []
     for (let x = 0; x < count; x++) {
       for (let y = 0; y < count; y++) {
-        const u = x / (count - 1)
-        const v = y / (count - 1)
+        const u = count > 1 ? x / (count - 1) : 1
+        const v = count > 1 ? y / (count - 1) : 1
         grid.push({
           position: [u, v],
-          color: `rgba(10, 10, 10, 1)`,
+          color: `rgba(0, 0, 0, 1)`,
         })
       }
     }
     return grid
   }
 
-  const data = createGrid(20)
-  const margin = 2
+  const data = createGrid(4)
+  const margin = 3
   const iterations = 1
-  const segmentMax = 100
-  const scale = 2.5 
+  const segmentMax = 1000
+  const scale = 100 
   const zScale = 0.4
   const strength = 0.008
+  const maxAngle = Math.PI
   const strokeStyleFactor = 0.002
-  const yTransFactor = 0.1
 
   return ({ context, width, height }) => {
     context.fillStyle = '#fdfdfd';
@@ -44,21 +46,60 @@ const sketch = () => {
         const [ u, v ] = position
         let x = lerp(margin, width - margin, u)
         let y = lerp(margin, height - margin, v)
-        context.beginPath()
-        context.strokeStyle = color;
-        const segments = random.gaussian() * segmentMax
-        for( let j = 0; j < segments; j++ ) {
+
+        const numSegments = random.gaussian() * segmentMax
+        const segments = []
+
+        for( let j = 0; j < numSegments; j++ ) {
           const angle = random.noise3D(
             x * scale,
             y * scale,
-            i * zScale) * Math.PI * 2
+            i * zScale) * maxAngle
           x += Math.cos(angle) * strength
           y += Math.sin(angle) * strength
-          context.lineTo(x, y)
+          segments.push([x, y])
         }
-        context.stroke()
+
+        // context.beginPath()
+        // context.strokeStyle = color;
+        // segments.forEach(([x, y]) => context.lineTo(x, y))
+        // context.stroke()
+
+        const shadowMax = 0.2
+        const shadowDensity = 0.04
+        const maxHeight = 50
+        segments.forEach(([x, y], i, seg) => {
+          if ( seg[i - 1] ) {
+            const height = Math.floor(
+              Math.pow(
+                Math.abs(normalize(sub(seg[i - 1], seg[i]))[1]), 2
+              ) * maxHeight
+            )
+            for( let i = 0; i < height; i++ ) {
+              const angle = i / height
+              context.strokeStyle = `hsla(
+                ${lerp(180, 220, angle)},
+                ${lerp(40, 55, angle)}%,
+                ${lerp(30, 100, angle)}%,
+                ${shadowMax - (shadowMax * angle)})`
+              const nAngle = random.noise3D(
+                x * scale,
+                y * scale,
+                i * zScale) * maxAngle
+              x += Math.cos(nAngle) * strength * 10
+              y += Math.sin(nAngle) * strength * 10
+              context.beginPath()
+              context.arc(
+                x + (height * angle * shadowDensity * 0.5),
+                y + (height * angle * shadowDensity),
+                width * strokeStyleFactor * 0.5,
+                Math.PI * 2,
+                false)
+              context.stroke()
+            }
+          }
+        })
       })
-      console.log(`${i} of ${iterations} iterations`)
     }
   };
 };

@@ -6,7 +6,7 @@ const settings = {
   // dimensions: [ 2048, 2048 ],
   dimensions: 'poster',
   units: 'px',
-  pixelsPerInch: 300
+  pixelsPerInch: 600
 };
 
 const sketch = () => {
@@ -24,10 +24,10 @@ const sketch = () => {
   }
 
 
-  const detail = 5000
+  const detail = 10000
   const margin = 200
   const radius = 0.6
-  const shadowDensity = 450
+  const shadowDensity = 900
   const noiseStrength = 2.5
   const noiseScale = 1.4
   const segments = createSegments()

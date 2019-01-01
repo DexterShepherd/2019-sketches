@@ -10,8 +10,6 @@ const settings = {
 };
 
 const sketch = () => {
-
-
   const createSegments = () => {
     const s = [] 
     for( let i = 0; i < detail; i++ ) {
@@ -22,7 +20,6 @@ const sketch = () => {
     }
     return s
   }
-
 
   const detail = 10000
   const margin = 200
@@ -48,7 +45,6 @@ const sketch = () => {
     context.fillStyle = 'hsl(200, 10%, 98%)';
     context.fillRect(0, 0, width, height);
 
-    // drawSegments()
     segments.forEach(([u, v], i, segments) => {
       console.log(`${i + 1} of ${segments.length}`)
       if ( i > -1 ) {
@@ -62,18 +58,18 @@ const sketch = () => {
           )
           x += Math.cos(n + angle) * noiseStrength
           y += Math.sin(n + angle) * noiseStrength
-          if ( gaussian() > 0.1 ) {
+          if ( gaussian() > 0.15 ) {
             if ( gaussian() > u)  {
               const hue = lerp(260, 230, angle)
               context.fillStyle = `hsla(${hue}, ${lerp(60, 100, n)}%, ${lerp(70, 60, n)}%, 0.6)`
               context.beginPath()
-              context.arc(x, y, 2, Math.PI * 2, false)
+              context.arc(x, y, 3, Math.PI * 2, false)
               context.fill()
             } else {
               const hue = lerp(280, 340, angle)
               context.fillStyle = `hsla(${hue}, ${lerp(100, 60, n)}%, ${lerp(70, 40, n)}%, 0.6)`
               context.beginPath()
-              context.arc(x, y, 2, Math.PI * 2, false)
+              context.arc(x, y, 3, Math.PI * 2, false)
               context.fill()
             }
           }

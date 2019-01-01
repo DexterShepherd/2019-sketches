@@ -3,7 +3,10 @@ const { lerp } = require('canvas-sketch-util/math')
 const { noise2D, gaussian } = require('canvas-sketch-util/random')
 
 const settings = {
-  dimensions: [ 2048, 2048 ]
+  // dimensions: [ 2048, 2048 ],
+  dimensions: 'poster',
+  units: 'px',
+  pixelsPerInch: 300
 };
 
 const sketch = () => {
@@ -21,12 +24,12 @@ const sketch = () => {
   }
 
 
-  const detail = 1000
+  const detail = 5000
   const margin = 200
   const radius = 0.6
-  const shadowDensity = 350
-  const noiseStrength = 1.5
-  const noiseScale = 1
+  const shadowDensity = 450
+  const noiseStrength = 3.5
+  const noiseScale = 1.4
   const segments = createSegments()
 
   return ({ context, width, height }) => {
@@ -47,6 +50,7 @@ const sketch = () => {
 
     // drawSegments()
     segments.forEach(([u, v], i, segments) => {
+      console.log(`${i + 1} of ${segments.length}`)
       if ( i > -1 ) {
         let x = lerp(margin, width - margin, u)
         let y = lerp(margin, height - margin, v)
@@ -58,18 +62,20 @@ const sketch = () => {
           )
           x += Math.cos(n + angle) * noiseStrength
           y += Math.sin(n + angle) * noiseStrength
-          if ( gaussian() > u)  {
-            const hue = lerp(260, 230, angle)
-            context.fillStyle = `hsla(${hue}, 100%, 70%, 0.3)`
-            context.beginPath()
-            context.arc(x, y, 2, Math.PI * 2, false)
-            context.fill()
-          } else {
-            const hue = lerp(00, 20, angle)
-            context.fillStyle = `hsla(${hue}, 100%, 50%, 0.1)`
-            context.beginPath()
-            context.arc(x, y, 2, Math.PI * 2, false)
-            context.fill()
+          if ( gaussian() > 0.1 ) {
+            if ( gaussian() > u)  {
+              const hue = lerp(260, 230, angle)
+              context.fillStyle = `hsla(${hue}, ${lerp(60, 100, n)}%, ${lerp(70, 60, n)}%, 0.6)`
+              context.beginPath()
+              context.arc(x, y, 2, Math.PI * 2, false)
+              context.fill()
+            } else {
+              const hue = lerp(280, 340, angle)
+              context.fillStyle = `hsla(${hue}, ${lerp(100, 60, n)}%, ${lerp(70, 40, n)}%, 0.6)`
+              context.beginPath()
+              context.arc(x, y, 2, Math.PI * 2, false)
+              context.fill()
+            }
           }
         }
       }

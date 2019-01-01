@@ -28,7 +28,7 @@ const sketch = () => {
   const margin = 200
   const radius = 0.6
   const shadowDensity = 450
-  const noiseStrength = 3.5
+  const noiseStrength = 2.5
   const noiseScale = 1.4
   const segments = createSegments()
 
